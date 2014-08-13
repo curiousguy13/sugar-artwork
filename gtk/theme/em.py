@@ -1662,13 +1662,25 @@ class Scanner:
 
     def __bool__(self): return self.pointer < len(self.buffer)
     def __len__(self): return len(self.buffer) - self.pointer
-    def __getitem__(self, index): return self.buffer[self.pointer + index]
-
+    def __getitem__(self, index):
+        print("%poop:sugar/data/em.py/getitem_start")
+        
+        if isinstance(index,slice):
+            print("index=",index)
+            start=index.indices(len(self))[0]
+            stop=index.indices(len(self))[1]
+            print("indices=",index.indices(len(self))[1])
+            if stop > len(self):
+                stop = len(self)
+            return self.buffer[self.pointer + start:self.pointer + stop]
+       
+        return self.buffer[self.pointer + index]
+    '''
     def __getslice__(self, start, stop):
         if stop > len(self):
             stop = len(self)
         return self.buffer[self.pointer + start:self.pointer + stop]
-
+    '''
     def advance(self, count=1):
         """Advance the pointer count characters."""
         self.pointer = self.pointer + count
